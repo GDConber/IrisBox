@@ -1,0 +1,46 @@
+a {
+	color: rgb(0,102,204);
+}
+body{
+	font-family: Helvetica,"PingFang SC","Microsoft YaHei",sans-serif;
+	line-height: 1.875em;
+	margin: 0 auto;
+	max-width: 600px;
+	padding: .3em 20px;
+	word-break: break-word;
+}
+h1,
+h2 {
+	border-bottom: 1px solid rgb(234,236,239);
+	line-height: initial;
+	padding-bottom: .3em;
+}
+h1 {
+	font-size: 1.75em;
+	text-align: center;
+}
+h2 {
+	font-size: 1.25em;
+}
+@media (prefers-color-scheme: dark) {
+	* {
+		scrollbar-color: rgba(255,255,255,.25) rgb(53,54,58);
+	}
+	a {
+		color: rgb(86,156,214);
+	}
+	body {
+		background-color: rgb(53,54,58);
+		color: white;
+	}
+	h1,
+	h2 {
+		border-color: rgba(255,255,255,.1);
+	}
+	::-webkit-scrollbar {
+		width: 6px;
+	}
+	::-webkit-scrollbar-thumb {
+		background-color: rgba(255,255,255,.25);
+	}
+}

@@ -1,127 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh_cn">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>IrisBox</title>
 
         <!-- import CSS -->
         <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-        
-        <style>
-            :root {
-                --b-alpha-3: rgba(0,0,0,.03);
-                --b-alpha-5: rgba(0,0,0,.05);
-                --b-alpha-7: rgba(0,0,0,.07);
-                --b-alpha-10: rgba(0,0,0,.1);
-                --b-alpha-15: rgba(0,0,0,.15);
-                --b-alpha-20: rgba(0,0,0,.2);
-                --b-alpha-30: rgba(0,0,0,.3);
-                --b-alpha-35: rgba(0,0,0,.35);
-                --b-alpha-40: rgba(0,0,0,.4);
-                --b-alpha-50: rgba(0,0,0,.5);
-                --b-alpha-60: rgba(0,0,0,.6);
-                --b-alpha-70: rgba(0,0,0,.7);
-                --b-alpha-80: rgba(0,0,0,.8);
-                --b-alpha-90: rgba(0,0,0,.9);
-                --bg-w-pure: white;
-                --main-bg-color: rgb(250,250,250);
-                --theme-color: rgb(158,81,208);
-                --theme-color-logo: rgb(158,81,208);
-                --txt-b-pure: black;
-                --txt-w-pure: white;
-                --w-alpha-05: rgba(255,255,255,.05);
-                --w-alpha-10: rgba(255,255,255,.1);
-                --w-alpha-20: rgba(255,255,255,.2);
-                --w-alpha-30: rgba(255,255,255,.3);
-                --w-alpha-50: rgba(255,255,255,.5);
-                --w-alpha-60: rgba(255,255,255,.6);
-                --w-alpha-70: rgba(255,255,255,.7);
-                --w-alpha-80: rgba(255,255,255,.8);
-                --w-alpha-90: rgba(255,255,255,.9);
-            }
-            * {
-                margin: 0;
-                outline: none;
-                scrollbar-color: var(--b-alpha-15) var(--bg-w-pure);
-                scrollbar-width: thin;
-            }
+        <link rel="stylesheet" href="white_list.css">
 
-            body {
-                background-color: var(--main-bg-color);
-            }
-
-            .title {
-                width: 100%;
-                height: 50px;
-                background-color: #FFFFFF;
-                box-shadow: 0 0 15px rgba(0,0,0,.08) !important;
-            }
-            .title_text {
-                margin-left: 5px;
-                padding: 12px;
-                font-size: 35px;
-                color: var(--b-alpha-70);
-            }
-
-            .box {
-                margin: 10px;
-                padding: 10px;
-                background-color: #FFFFFF;
-                border-style:solid;
-                border-width:.1rem;
-                border-color: #FFFFFF;
-                border-radius: 8px;
-                box-shadow: 0 0 15px rgba(0,0,0,.05) !important;
-                padding-bottom: 15px;
-                padding-top: 0px;
-            }
-
-            footer {
-                bottom: 18px;
-                color: var(--b-alpha-35);
-                font-size: 12px;
-                line-height: 20px;
-                position: absolute;
-                transition: color .25s;
-            }
-            footer .link1 {
-                margin: 0;
-            }
-            #footerL {
-                left: 25px;
-                left: calc(env(safe-area-inset-left) + 25px);
-                text-align: left;
-            }
-            #footerR {
-                right: 25px;
-                right: calc(env(safe-area-inset-right) + 25px);
-                text-align: right;
-            }
-
-            .link1 {
-                color: var(--theme-color);
-                cursor: pointer;
-                transition: all .25s;
-                text-decoration:none
-            }
-            .link1:link,
-            .link1:visted {
-                color: var(--theme-color);
-            }
-            .link1:hover {
-                color: rgb(65,105,225);
-            }
-            .link1:active {
-                color: rgba(0,0,128,.8);
-            }
-
-            
-            .sublim{
-                color: var(--theme-color);
-                background-color: var(--theme-color);
-            }
-          </style>
+        <title>IrisBox</title>
     </head>
     <body>
         <div id="app">
@@ -138,10 +25,21 @@
                 <el-col :xs="24" :sm="20" :md="16" :lg="10" :xl="8">
                     <div class="box">
 
-                        <el-input v-model="input_mcid" placeholder="请输入" style="margin-top: 15px;width: 100%;">
+                        <el-input v-show="input_box" v-model="input_mcid" id="input_mcid" placeholder="请输入" style="margin-top: 15px;width: 100%;">
                             <template slot="prepend">Minecraft正版ID</template>
                         </el-input>
-                        <el-button type="success" style="margin-top: 15px;width: 100%;" class="sublim" plain>提交 <i class="el-icon-arrow-right el-icon--right"></i></el-button>
+                        <el-button v-show="submit_btn" type="success" style="margin-top: 15px;width: 100%;" class="submit" @click="submit()" plain>提交 <i class="el-icon-arrow-right el-icon--right"></i></el-button>
+                        <el-alert
+                            v-show="success_alert"
+                            class="success_alert"
+                            :closable="false"
+                            title="生成成功！"
+                            type="success"
+                            description="内容已复制到剪贴板，请发送到QQ群完成绑定QQ"
+                            show-icon>
+                        </el-alert>
+                        <h2 v-show="whitelist_text_show" class="whitelist_text" id="copy_text">{{ whitelist_text }}</h2>
+                        <el-button v-show="copy_btn_show" @click="copy_btn" type="success" class="copy_btn" plain>已复制到剪贴板 <i class="el-icon-copy-document el-icon--right"></i></el-button>
                     </div>
                     
                 </el-col>
@@ -151,7 +49,7 @@
             </el-row>
 
             <footer id="footerL"><a href="#" class="link1">服务条款</a></footer>
-            <footer id="footerR">由 <a href="#" class="link1">ChenBinAc</a> 开发<br>© 2020 yuze.gq 保留所有权利</footer>
+            <footer id="footerR">由 <a href="#" class="link1">饶宇泽</a> 开发<br>© 2020 <a href="#" class="link1">yuze.gq</a> 保留所有权利</footer>
         </div>
     </body>
     <!-- import Vue before Element -->
@@ -164,20 +62,52 @@
             data: function() {
             return { 
                 visible: false ,
-                input_mcid: ''
-                
+                input_mcid: '',
+                input_box: true, 
+                submit_btn: true,
+                whitelist_text_show: false,
+                success_alert: false,
+                whitelist_text: "",
+                copy_btn_show: false
             }
             },
             methods: {
                 goBack() {
                     window.open('../index.html')
+                },
+                submit() {
+                    var mcid = input_mcid.value
+                    var whitelist_message = ".申请白名单 "
+                    if (mcid != "" && mcid != null) {
+                        this.input_box = false
+                        this.submit_btn = false
+                        whitelist_message = whitelist_message + mcid
+                        
+                        this.success_alert = true
+                        this.whitelist_text_show = true
+                        this.whitelist_text = whitelist_message
+                        this.copy_btn_show = true
+
+                        let transfer = document.createElement("input");
+                        document.body.appendChild(transfer);
+                        transfer.value = this.whitelist_text;
+                        transfer.focus();
+                        transfer.select();
+                        if (document.execCommand("copy")) {
+                            document.execCommand("copy");
+                        }
+                        transfer.blur();
+                        document.body.removeChild(transfer);
+                    }else {
+                        this.$message.error('请填写 Minecraft正版ID');
+                    }
+
+                },
+                copy_btn() {
+                    document.execCommand("Copy");
                 }
             }
             
         })
-    </script>
-
-    <script>
-
     </script>
 </html>
