@@ -33,9 +33,9 @@
                             v-show="success_alert"
                             class="success_alert"
                             :closable="false"
-                            title="生成成功！"
+                            title="就差最后一步了"
                             type="success"
-                            description="内容已复制到剪贴板，请发送到QQ群完成绑定QQ"
+                            description="内容已复制到剪贴板，请先将群昵称加上您的ID，然后将以下内容发送到QQ群以绑定QQ"
                             show-icon>
                         </el-alert>
                         <h2 v-show="whitelist_text_show" class="whitelist_text" id="copy_text">{{ whitelist_text }}</h2>
@@ -104,7 +104,16 @@
 
                 },
                 copy_btn() {
-                    document.execCommand("Copy");
+                    let transfer = document.createElement("input");
+                        document.body.appendChild(transfer);
+                        transfer.value = this.whitelist_text;
+                        transfer.focus();
+                        transfer.select();
+                        if (document.execCommand("copy")) {
+                            document.execCommand("copy");
+                        }
+                        transfer.blur();
+                        document.body.removeChild(transfer);
                 }
             }
             
